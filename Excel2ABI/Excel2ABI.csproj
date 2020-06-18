@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{352B9CF5-9FEB-45F9-B8F3-99BFED4151DB}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Excel2TXT</RootNamespace>
-    <AssemblyName>Excel2TXT</AssemblyName>
+    <RootNamespace>Excel2ABI</RootNamespace>
+    <AssemblyName>Excel2ABI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
@@ -33,6 +33,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Excel2ABI.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">

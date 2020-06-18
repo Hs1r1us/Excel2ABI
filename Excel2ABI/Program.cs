@@ -16,6 +16,7 @@ namespace Excel2ABI
         static bool is384Board, isSingle;
         static string outPutName;
         static List<string> errorMsg = new List<string>();
+        static private bool NameErrorFlag;
 
         [STAThread]
         static void Main(string[] args)
@@ -77,7 +78,13 @@ namespace Excel2ABI
                     for (var i = 0; ; i++)
                     {
                         sourceList = new List<string>();
-                        var tempVar = sheet.GetRow(0).GetCell(i);
+
+                        ICell tempVar = null;
+                        var tempRow = sheet.GetRow(0);
+                        if (tempRow != null)
+                        {
+                            tempVar = tempRow.GetCell(i);
+                        }
 
                         if (tempVar != null)
                         {
@@ -99,7 +106,7 @@ namespace Excel2ABI
                         if (!CheckFileName(boardSuffix))
                         {
                             boardSuffix = (i + 1).ToString();
-                            errorMsg.Add("第" + (i + 1) + "列命名非法，已更名为" + (i + 1));
+                            NameErrorFlag = true;
                         }
 
                         if (isSingle)
@@ -109,13 +116,19 @@ namespace Excel2ABI
 
                         for (var j = 0; j < 92; j++)
                         {
-                            var cell = sheet.GetRow(j + 1).GetCell(i);
+                            ICell cell = null;
+                            var row = sheet.GetRow(j + 1);
+
+                            if (row != null)
+                            {
+                                cell = row.GetCell(i);
+                            }
                             string str;
 
                             if (cell == null)
                             {
                                 //判断处于当列首行为空 && 下列首行为空 && 384完成输出
-                                if (j == 0 && sheet.GetRow(j + 1).GetCell(i + 1) == null && (!is384Board || isSingle))
+                                if (j == 0 && (sheet.GetRow(j + 1) == null || sheet.GetRow(j + 1).GetCell(i + 1) == null) && (!is384Board || isSingle))
                                 {
                                     Console.WriteLine("");
                                     Console.ForegroundColor = ConsoleColor.Red;
@@ -128,6 +141,7 @@ namespace Excel2ABI
                                     Console.ReadLine();
                                     return;
                                 }
+
                                 sourceList.Add("");
                                 continue;
                             }
@@ -143,6 +157,13 @@ namespace Excel2ABI
                             }
                             sourceList.Add(str);
                         }
+
+                        if (NameErrorFlag)
+                        {
+                            errorMsg.Add("第" + (i + 1) + "列命名非法，已更名为" + (i + 1));
+                            NameErrorFlag = false;
+                        }
+
                         TXTWorker(boardSuffix);
                     }
                 }
